@@ -1,26 +1,58 @@
-name: Deploy FastAPI App
+name: FastAPI CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: yourrootpassword
+          MYSQL_DATABASE: greenroad_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run tests (if any)
-        run: echo "No tests yet"
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h127.0.0.1 -uroot -pyourrootpassword --silent; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      # - name: Run tests
+      #   run: pytest  # Uncomment and adjust if you have tests
+
       - name: Build Docker image
-        run: docker build -t container-backend .
-      - name: Simulate Deploy
-        run: bash run.sh & 
+        run: docker build -t hackxplore_backend .
+
+      # - name: Push Docker image (optional)
+      #   run: echo "Push to DockerHub or GHCR here" 
