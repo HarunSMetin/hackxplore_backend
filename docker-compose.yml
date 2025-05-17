@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  fastapi-app:
+    build: .
+    container_name: fastapi_container_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app  # Mounts your current directory to /app in the container for live code changes
+      - csv_data:/app/csv_data  # Persistent volume for CSV data
+    env_file:
+      - .env # Uses your existing .env file
+    environment:
+      # Override MYSQL_HOST to use the service name of the MySQL container
+      - MYSQL_HOST=mysql-db 
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - app-network
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql_container_db
+    ports:
+      # You can expose the MySQL port to your host if you need to connect with a GUI client
+      - "3307:3306" # Host port 3307 maps to container port 3306
+    environment:  
+      MYSQL_DATABASE: greenroad_db 
+      MYSQL_ROOT_PASSWORD: yourrootpassword
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist MySQL data
+      # Optional: Mount a custom MySQL config file
+      # - ./my-custom.cnf:/etc/mysql/conf.d/custom.cnf 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  csv_data:
+
+networks:
+  app-network:
+    driver: bridge
+    
