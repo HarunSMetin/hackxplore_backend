@@ -26,23 +26,7 @@ def init_db():
         
         if containers_count == 0:
             print("First setup detected - empty containers table.")
-            print("Running initial data import...")
-            try:
-                # Add the scripts directory to the Python path
-                sys.path.append(os.path.join(os.path.dirname(__file__), "scripts"))
-                from scripts.import_csv import import_data_from_csv
-                
-                csv_file_path = os.path.join(os.path.dirname(__file__), 
-                                           "augmented_common_containers_with_types.csv")
-                if os.path.exists(csv_file_path):
-                    print(f"Importing data from {csv_file_path}...")
-                    import_data_from_csv(csv_file_path)
-                else:
-                    print(f"CSV file not found: {csv_file_path}")
-                    print("Skipping data import. You can run it manually later.")
-            except Exception as e:
-                print(f"Error during initial data import: {e}")
-                print("Continuing with startup...")
+            print("CSV import disabled in init - use /admin/import-csv endpoint instead.")
         else:
             print(f"Database already contains {containers_count} containers.")
         
