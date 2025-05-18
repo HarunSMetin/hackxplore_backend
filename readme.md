@@ -1,7 +1,8 @@
 <h1 align="center">♻️ Container Occupancy Management Backend</h1>
 <p align="center">
   <b>Smart, Sustainable, and Scalable Waste Collection</b><br>
-  <i>Built with FastAPI & MySQL • Ready for Hackathons • Flutter-Ready API</i>
+  <i>Built with FastAPI & MySQL • Ready for Hackathons • Flutter-Ready API</i><br>
+  <a href="https://hackxplore-backend.onrender.com/docs" target="_blank"><b>🌐 Live API Docs (Deployed Version)</b></a>
 </p>
 
 ---
