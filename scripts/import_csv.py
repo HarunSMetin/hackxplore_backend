@@ -12,9 +12,7 @@ DB_HOST = os.getenv("MYSQL_HOST")
 DB_USER = os.getenv("MYSQL_USER")
 DB_PASSWORD = os.getenv("MYSQL_PASSWORD")
 DB_NAME = os.getenv("MYSQL_DB")
-DB_PORT = int(os.getenv("MYSQL_PORT", 3306))
-
-print(f"[CSV_IMPORT_DEBUG] DB_HOST: {DB_HOST}, DB_USER: {DB_USER}, DB_NAME: {DB_NAME}, DB_PORT: {DB_PORT}")
+DB_PORT = int(os.getenv("MYSQL_PORT", 3306)) 
 
 def get_db_connection():
     print("[CSV_IMPORT_DEBUG] Attempting to connect to database...")
