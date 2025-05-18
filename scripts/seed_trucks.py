@@ -8,17 +8,17 @@ def seed_trucks():
             "name": "Truck-001",
             "location_lat": 49.461,
             "location_lng": 8.4723,
-            "white_glass_capacity": 1000,
-            "green_glass_capacity": 800,
-            "brown_glass_capacity": 900
+            "capacity_white": 1000,  # Changed from white_glass_capacity
+            "capacity_green": 800,  # Changed from green_glass_capacity
+            "capacity_brown": 900   # Changed from brown_glass_capacity
         },
         {
             "name": "Truck-002",
             "location_lat": 49.493,
             "location_lng": 8.4654,
-            "white_glass_capacity": 1200,
-            "green_glass_capacity": 1000,
-            "brown_glass_capacity": 1100
+            "capacity_white": 1200,  # Changed from white_glass_capacity
+            "capacity_green": 1000,  # Changed from green_glass_capacity
+            "capacity_brown": 1100   # Changed from brown_glass_capacity
         }
     ]
 

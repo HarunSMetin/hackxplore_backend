@@ -7,30 +7,30 @@ from crud import truck as truck_crud
 
 router = APIRouter()
 
-@router.post("/trucks/", response_model=Truck)
+@router.post("/", response_model=Truck)
 def create_truck(truck: TruckCreate, db: Session = Depends(get_db)):
     return truck_crud.create_truck(db=db, truck=truck)
 
-@router.get("/trucks/", response_model=List[Truck])
+@router.get("/", response_model=List[Truck])
 def read_trucks(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     trucks = truck_crud.get_trucks(db, skip=skip, limit=limit)
     return trucks
 
-@router.get("/trucks/{truck_id}", response_model=Truck)
+@router.get("/{truck_id}", response_model=Truck)
 def read_truck(truck_id: int, db: Session = Depends(get_db)):
     db_truck = truck_crud.get_truck(db, truck_id=truck_id)
     if db_truck is None:
         raise HTTPException(status_code=404, detail="Truck not found")
     return db_truck
 
-@router.put("/trucks/{truck_id}", response_model=Truck)
+@router.put("/{truck_id}", response_model=Truck)
 def update_truck(truck_id: int, truck: TruckUpdate, db: Session = Depends(get_db)):
     db_truck = truck_crud.update_truck(db, truck_id=truck_id, truck=truck)
     if db_truck is None:
         raise HTTPException(status_code=404, detail="Truck not found")
     return db_truck
 
-@router.delete("/trucks/{truck_id}")
+@router.delete("/{truck_id}")
 def delete_truck(truck_id: int, db: Session = Depends(get_db)):
     success = truck_crud.delete_truck(db, truck_id=truck_id)
     if not success:

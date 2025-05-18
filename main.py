@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
-from routes import containers, truck, admin  # Add the admin import
+from routes import containers, truck, admin, route_planning  # Add route_planning
 import uvicorn
 from fastapi.responses import RedirectResponse
 from datetime import datetime
@@ -47,6 +47,7 @@ def health_check():
 app.include_router(containers.router, prefix="/containers", tags=["containers"])
 app.include_router(truck.router, tags=["trucks"])
 app.include_router(admin.router, prefix="/admin", tags=["admin"])  # Add the admin router
+app.include_router(route_planning.router, prefix="/planning", tags=["route-planning"])  # Add this line
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

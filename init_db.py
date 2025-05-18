@@ -1,6 +1,8 @@
 from database import engine
 from models.container import Base as ContainerBase
 from models.truck import Base as TruckBase
+from models.truck_route import Base as TruckRouteBase
+from models.route_stop import Base as RouteStopBase
 import os
 import sys
 from sqlalchemy import text
@@ -11,6 +13,8 @@ def init_db():
     # Create all tables
     ContainerBase.metadata.create_all(bind=engine)
     TruckBase.metadata.create_all(bind=engine)
+    TruckRouteBase.metadata.create_all(bind=engine)
+    RouteStopBase.metadata.create_all(bind=engine)
     
     print("Database tables created successfully.")
 

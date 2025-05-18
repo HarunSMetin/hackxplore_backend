@@ -115,7 +115,7 @@ def get_nearest_readings(
                     "container_id": reading.container_id,
                     "reading_id": reading.reading_id,
                     "timestamp": reading.timestamp,
-                    "fill_level": reading.fill_level_litres,
+                    "current_fill": reading.current_fill,
                     "location": container.address,
                     "coordinates": {
                         "latitude": container.location_lat,

@@ -4,7 +4,7 @@ from datetime import datetime
 class ContainerReadingBase(BaseModel):
     container_id: int
     timestamp: datetime
-    fill_level_litres: int
+    current_fill: int
 
 class ContainerReadingResponse(ContainerReadingBase):
     reading_id: int
