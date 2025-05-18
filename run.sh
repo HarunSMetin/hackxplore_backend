@@ -7,25 +7,33 @@ echo "Waiting for MySQL to be ready..."
 MAX_RETRIES=30
 RETRY_INTERVAL=5
 RETRY_COUNT=0
+# Add MySQL configuration
+export MYSQL_VARIABLES="wait_timeout=600 innodb_lock_wait_timeout=50 innodb_deadlock_detect=ON"
 
 # Function to check if MySQL is ready
 check_mysql() {
   python -c "
 import pymysql
 import os
+import time
 
-try:
-    connection = pymysql.connect(
-        host=os.environ.get('MYSQL_HOST', 'mysql-db'),
-        user=os.environ.get('MYSQL_USER', 'root'),
-        password=os.environ.get('MYSQL_PASSWORD', 'yourrootpassword'),
-        port=int(os.environ.get('MYSQL_PORT', 3306))
-    )
-    connection.close()
-    exit(0)
-except Exception as e:
-    print(f'MySQL connection failed: {e}')
-    exit(1)
+max_retries = 3
+for attempt in range(max_retries):
+    try:
+        connection = pymysql.connect(
+            host=os.environ.get('MYSQL_HOST', 'mysql-db'),
+            user=os.environ.get('MYSQL_USER', 'root'),
+            password=os.environ.get('MYSQL_PASSWORD', 'yourrootpassword'),
+            port=int(os.environ.get('MYSQL_PORT', 3306)),
+            connect_timeout=10
+        )
+        connection.close()
+        exit(0)
+    except Exception as e:
+        if attempt == max_retries - 1:
+            print(f'MySQL connection failed: {e}')
+            exit(1)
+        time.sleep(2 ** attempt)  # Exponential backoff
 "
 }
 
