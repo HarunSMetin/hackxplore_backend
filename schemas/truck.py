@@ -27,4 +27,4 @@ class Truck(TruckBase):
     updated_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated from orm_mode = True for Pydantic v2
