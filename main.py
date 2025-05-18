@@ -4,6 +4,8 @@ from routes import containers
 import uvicorn
 from fastapi.responses import RedirectResponse
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
+import os
 
 # Custom operationId for better client generation
 
@@ -11,6 +13,21 @@ def custom_generate_unique_id(route: APIRoute):
     return f"{route.tags[0]}-{route.name}" if route.tags else route.name
 
 app = FastAPI(generate_unique_id_function=custom_generate_unique_id)
+
+# Get allowed origins from environment variable
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,https://your-frontend-domain.com"
+).split(",")
+
+# Add CORS middleware with environment-based configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Root endpoint that redirects to the API docs
 @app.get("/", tags=["root"])
@@ -30,4 +47,4 @@ def health_check():
 app.include_router(containers.router, prefix="/containers", tags=["containers"])
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) 
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
